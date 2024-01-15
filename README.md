@@ -27,7 +27,7 @@ git clone https://github.com/FlapyPan/shiru-disk
 cd shiru-disk
 cp .env.example .env # 根据说明修改对应的配置
 pnpm i
-pnpm start dev
+pnpm dev
 ```
 
 ## 预览
