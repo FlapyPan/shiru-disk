@@ -8,6 +8,10 @@
  * @property {boolean?} jsonPayload payload 是否为 json
  */
 
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
+
 /**
  * 封装的 fetch api, 请求和响应全部使用 json
  * @param {ApiOptions} options
@@ -19,7 +23,7 @@ export default async function api(
     method: 'GET',
     payload: undefined,
     jsonPayload: true,
-  }
+  },
 ) {
   const { url, method, payload, jsonPayload } = options
   const headers = {}
@@ -40,6 +44,7 @@ export default async function api(
   } catch (e) {
     if (e.statusCode === 401) useAuth().logout()
     console.error(e)
+    toast.error(e.message || '未知错误')
     throw e
   }
 }

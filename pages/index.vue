@@ -20,12 +20,10 @@ const captchaWaitTime = ref(0)
 let captchaInterval = 0
 const captchaBtnDisabled = computed(() => !/^1[3-9]\d{9}$/.test(loginForm.phone))
 const doSend = ref(false)
-const sendError = ref('')
 
 function sendCaptcha() {
   if (captchaWaitTime.value) return
   doSend.value = true
-  sendError.value = ''
   sendPhone.value = loginForm.phone
   api
     .post(`/auth/captcha`, { phone: loginForm.phone })
@@ -38,23 +36,19 @@ function sendCaptcha() {
         captchaWaitTime.value = value
       }, 1000)
     })
-    .catch(({ message }) => (sendError.value = message || '未知错误'))
     .finally(() => (doSend.value = false))
 }
 
 const doLogin = ref(false)
-const loginError = ref('')
 watchEffect(() => {
   if (loginForm.captcha.length === 5) {
     doLogin.value = true
-    loginError.value = ``
     auth
       .login(loginForm)
       .then(() => {
         if (route.query.next) navigateTo(`${route.query.next}`)
         else navigateTo('/disk')
       })
-      .catch(({ message }) => (loginError.value = message || '未知错误'))
       .finally(() => (doLogin.value = false))
   }
 })
@@ -68,7 +62,8 @@ watchEffect(() => {
         <p class="info">为你电脑/手机中的文件提供云存储、分享等服务，帮你更便捷安全地管理数据。</p>
         <v-dialog v-model="dialog" width="500">
           <template v-slot:activator="{ props }">
-            <VBtn class="mt-6 btn" color="light-blue-lighten-4" prepend-icon="mdi-login" rounded size="large" v-bind="props"
+            <VBtn class="mt-6 btn" color="light-blue-lighten-4" prepend-icon="mdi-login" rounded size="large"
+                  v-bind="props"
                   variant="flat">
               立即登录
             </VBtn>
@@ -98,7 +93,6 @@ watchEffect(() => {
                 </div>
                 <v-otp-input v-model="loginForm.captcha" :error="!!loginError" label="验证码" length="5"></v-otp-input>
               </template>
-              <error-alert :show="!!(sendError || loginError)" :text="sendError || loginError" />
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -127,10 +121,10 @@ watchEffect(() => {
   justify-content: space-evenly;
   height: 100%;
   padding: 1em 1em 6rem;
+  animation: BG 0.6s;
   background-color: rgba(255, 255, 255, 0.2);
   gap: 3rem;
   backdrop-filter: blur(6px);
-  animation: BG 0.6s;
 }
 
 .login-page .title {
@@ -151,8 +145,8 @@ watchEffect(() => {
 
 .banner-sub :deep(img) {
   width: 100%;
-  filter: drop-shadow(0 0 0.4rem rgb(171, 227, 255));
   animation: FadeIn 0.6s;
+  filter: drop-shadow(0 0 0.4rem rgb(171, 227, 255));
 }
 
 @keyframes BG {
