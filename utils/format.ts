@@ -1,9 +1,9 @@
 /**
  * 将数值大小的数字转换为人类可读的字符串表示
  * @param {number} size - 要转换的数字
- * @returns {string} - 人类可读的字符串表示
+ * @return {string} - 人类可读的字符串表示
  */
-export function formatSize(size) {
+export function formatSize(size: number): string {
   if (size === 0) return '0'
   if (!size) return '-'
   size = +size
@@ -20,16 +20,21 @@ export function formatSize(size) {
   return size.toFixed(1) + units[unitIndex]
 }
 
-const codeIcon = { icon: 'mdi-file-code', color: 'pink' }
-const textIcon = { icon: 'mdi-clipboard-text', color: 'light-blue' }
-const audioIcon = { icon: 'mdi-music', color: 'red' }
-const imageIcon = { icon: 'mdi-image', color: 'green' }
-const videoIcon = { icon: 'mdi-video', color: 'blue' }
-const officeIcon = { icon: 'mdi-clipboard-text', color: 'light-blue' }
-const otherIcon = { icon: 'mdi-file', color: 'grey' }
+interface FileIcon {
+  icon: string
+  color: string
+}
+
+const codeIcon: FileIcon = { icon: 'mdi-file-code', color: 'pink' }
+const textIcon: FileIcon = { icon: 'mdi-clipboard-text', color: 'light-blue' }
+const audioIcon: FileIcon = { icon: 'mdi-music', color: 'red' }
+const imageIcon: FileIcon = { icon: 'mdi-image', color: 'green' }
+const videoIcon: FileIcon = { icon: 'mdi-video', color: 'blue' }
+const officeIcon: FileIcon = { icon: 'mdi-clipboard-text', color: 'light-blue' }
+const otherIcon: FileIcon = { icon: 'mdi-file', color: 'grey' }
 
 // 将常见的MIME类型与图标进行映射
-const fileTypeMap = {
+const fileTypeMap: Record<string, FileIcon> = {
   'text/css': codeIcon,
   'text/html': codeIcon,
   'application/msword': officeIcon,
@@ -41,10 +46,10 @@ const fileTypeMap = {
 
 /**
  * 根据MIME类型获取图标
- * @param {string} mimeType - 文件的MIME类型
- * @returns {{icon:string,color:string}} - 图标
+ * @param {string} [mimeType] - 文件的MIME类型
+ * @returns {FileIcon} - 图标
  */
-export function fileTypeIcon(mimeType) {
+export function fileTypeIcon(mimeType?: string): FileIcon {
   if (!mimeType) return otherIcon
   // 查找映射关系，如果找不到则返回默认图标
   const icon = fileTypeMap[mimeType]

@@ -1,18 +1,7 @@
+import type { IFile } from '~/types/models'
 import { defineMongooseModel } from '#nuxt/mongoose'
-import { Schema, Types } from 'mongoose'
+import { Schema } from 'mongoose'
 
-interface IFile {
-  userId: Types.ObjectId;
-  isDir: boolean;
-  filename: string;
-  path: string;
-  size: string;
-  storeId: string;
-  mimeType: string;
-  deleted: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 // 文件模型
 export const Files = defineMongooseModel<IFile>('File', {

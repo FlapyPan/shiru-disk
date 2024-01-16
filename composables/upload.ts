@@ -1,17 +1,25 @@
-export function useUploader() {
-  const uploadState = useState('upload', () => ({
+function defaultState(): {
+  queue: Record<string, Partial<{ filename: string, path: string, size: number, mimeType: string, state: string }>>,
+  dialog: boolean,
+} {
+  return {
     queue: {},
     dialog: false,
-  }))
+  }
+}
 
-  const upload = async (path = '/') => {
+export function useUploader() {
+  const uploadState = useState('upload', () => defaultState())
+
+  const upload = async (path: string = '/') => {
     const inputElement = document.createElement('input')
     inputElement.type = 'file'
     // inputElement.multiple = true
     return new Promise((resolve, reject) => {
-      const onChange = (event) => {
+      const onChange = (event: Event) => {
+        const selectedFile = inputElement.files?.[0]
+        if (!selectedFile) return
         inputElement.removeEventListener('change', onChange)
-        const selectedFile = event.target.files[0]
         const form = new FormData()
         form.set('file', selectedFile)
         const key = crypto.randomUUID()

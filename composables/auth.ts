@@ -1,5 +1,5 @@
-export function useAuth() {
-  const user = useState('user', () => ({
+function defaultState() {
+  return {
     _id: '',
     phone: '',
     nickname: '',
@@ -7,22 +7,27 @@ export function useAuth() {
     createdAt: '',
     roles: [],
     roleName: '',
-  }))
+  }
+}
+
+export function useAuth() {
+  const user = useState('user', () => defaultState())
   const token = useCookie('shiru-token')
-  const isLogin = computed(() => !!token.value)
+  const isLogin = computed<boolean>(() => !!token.value)
 
   const check = async () => {
     try {
       user.value = await api.get(`/auth`)
-    } catch (_) {}
+    } catch (_) {
+    }
   }
 
-  const login = async (loginForm) => {
+  const login = async (loginForm: { phone: string, captcha: string }) => {
     user.value = await api.post(`/auth/login`, { ...loginForm })
   }
   const logout = () => {
     token.value = ''
-    user.value = {}
+    user.value = defaultState()
     return reloadNuxtApp()
   }
 

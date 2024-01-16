@@ -1,10 +1,18 @@
-export function useShare() {
-  const shareState = useState('share', () => ({
+import type { IFile } from '~/types/models'
+import type { WithId } from 'mongodb'
+
+function defaultState() {
+  const shareFiles: Array<Partial<WithId<IFile>>> = []
+  return {
     title: '',
     about: '',
-    shareFiles: [],
+    shareFiles,
     dialog: false,
-  }))
+  }
+}
+
+export function useShare() {
+  const shareState = useState('share', () => defaultState())
 
   const newShare = () => {
     const { user } = useAuth()
@@ -16,11 +24,11 @@ export function useShare() {
     }
   }
 
-  const addShare = (file) => {
+  const addShare = (file: Partial<WithId<IFile>>) => {
     if (file.isDir) return
     if (!shareState.value.title) newShare()
     shareState.value.dialog = true
-    if (shareState.value.shareFiles.some(({ _id }) => _id === file._id)) return
+    if (shareState.value.shareFiles.some((share) => share._id === file._id)) return
     shareState.value.shareFiles.push(file)
   }
 
@@ -29,7 +37,7 @@ export function useShare() {
     shareState.value.dialog = true
   }
 
-  const removeShare = (index) => {
+  const removeShare = (index: number) => {
     shareState.value.shareFiles.splice(index, 1)
   }
 

@@ -1,12 +1,6 @@
+import type { IUser } from '~/types/models'
 import { defineMongooseModel } from '#nuxt/mongoose'
 
-export interface IUser {
-  phone: string;
-  nickname: string;
-  avatar: Buffer;
-  roles: string[];
-  createdAt: Date;
-}
 
 export const Users = defineMongooseModel<IUser>('User', {
   // 手机号

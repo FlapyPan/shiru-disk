@@ -1,14 +1,7 @@
+import type { IShare } from '~/types/models'
 import { defineMongooseModel } from '#nuxt/mongoose'
-import { Schema, Types } from 'mongoose'
+import { Schema } from 'mongoose'
 
-export interface IShare {
-  userId: Types.ObjectId;
-  fileIds: Types.ObjectId[];
-  title: string;
-  about: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 export const Shares = defineMongooseModel<IShare>('Share', {
   // 用户id

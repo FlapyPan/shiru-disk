@@ -3,6 +3,9 @@ import vuetify from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
+  typescript: {
+    typeCheck: true,
+  },
   modules: [
     '@nuxtjs/color-mode',
     'nuxt-icon',
