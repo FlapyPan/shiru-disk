@@ -1,7 +1,5 @@
 import z from 'zod'
-import { useLogger } from '@nuxt/kit'
 
-const logger = useLogger('验证码接口[POST /api/auth/captcha]')
 const captchaCache = CaptchaCache.getInstance()
 
 export default eventHandler(async (event) => {
@@ -9,7 +7,7 @@ export default eventHandler(async (event) => {
     phone: z.string().regex(/^1[3-9]\d{9}$/, '请输入正确的手机号'),
   })
   const captcha = getCaptcha(phone)
-  logger.info(`手机号：${phone}, 验证码: ${captcha}`)
+  console.log(`手机号：${phone}, 验证码: ${captcha}`)
   captchaCache.addCaptcha(phone, captcha)
   // TODO 发送验证码
   return {}

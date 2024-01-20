@@ -2,14 +2,10 @@ import type { ZodRawShape } from 'zod/lib/types'
 import type { EventHandlerRequest, H3Event } from 'h3'
 import type { ObjectId } from 'bson'
 import z from 'zod'
-import { useLogger } from '@nuxt/kit'
-
-const logger = useLogger('utils-request')
 
 function parse<T extends ZodRawShape>(data: unknown, shape: T) {
   const result = z.object(shape).safeParse(data)
   if (!result.success) {
-    logger.warn(`表单校验错误`, result.error)
     throw createError({ statusCode: 400, message: result.error.toString() })
   }
   return result.data
